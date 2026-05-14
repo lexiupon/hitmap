@@ -8,6 +8,9 @@ on:
 permissions:
   contents: write
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 concurrency:
   group: release-${{ github.ref }}
   cancel-in-progress: false
@@ -29,7 +32,7 @@ jobs:
 
     steps:
       - name: Check out repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6.0.2
 
       - name: Verify tag matches Cargo version
         shell: bash
@@ -49,7 +52,7 @@ jobs:
           targets: ${{ matrix.target }}
 
       - name: Restore Cargo cache
-        uses: Swatinem/rust-cache@v2
+        uses: Swatinem/rust-cache@v2.9.1
 
       - name: Build release binary
         run: cargo build --locked --release --target ${{ matrix.target }}
@@ -71,7 +74,7 @@ jobs:
           tar -C dist -czf "dist/${asset_basename}.tar.gz" "${asset_basename}"
 
       - name: Upload packaged artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7.0.1
         with:
           name: release-${{ matrix.target }}
           path: dist/*.tar.gz
@@ -84,7 +87,7 @@ jobs:
 
     steps:
       - name: Download packaged artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8.0.1
         with:
           pattern: release-*
           merge-multiple: true
@@ -98,7 +101,7 @@ jobs:
           sha256sum *.tar.gz > SHA256SUMS.txt
 
       - name: Create GitHub release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3.0.0
         with:
           generate_release_notes: true
           files: |
