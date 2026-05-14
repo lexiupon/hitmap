@@ -49,7 +49,30 @@ cargo build --release
 ./target/release/hitmap --help
 ```
 
-### Requirements
+### Releases and binary artifacts
+
+GitHub Actions is set up to support both CI and tagged releases:
+
+- `CI` runs on pushes and pull requests and checks formatting, Clippy, tests, and release builds
+- `Release` runs when a `vX.Y.Z` tag is pushed
+- release artifacts include `.tar.gz` archives for:
+  - `x86_64-unknown-linux-gnu`
+  - `x86_64-apple-darwin`
+  - `aarch64-apple-darwin`
+- each GitHub release also includes a `SHA256SUMS.txt` file
+
+This release layout is intended to make it straightforward to reference published binaries from a future Homebrew tap.
+
+To cut a release:
+
+```bash
+cargo test
+cargo build --release
+git tag v3.1.0
+git push origin v3.1.0
+```
+
+## Requirements
 
 - `git` available on your `PATH`
 - A recent Rust toolchain with Cargo
