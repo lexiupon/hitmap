@@ -1,0 +1,22 @@
+[package]
+name = "hitmap"
+version = "3.1.0"
+edition = "2024"
+description = "Render git commit hitmaps as inline images in your terminal"
+license = "MIT"
+
+[dependencies]
+clap = { version = "4", features = ["derive"] }
+chrono = { version = "0.4", features = ["serde"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+toml = "0.8"
+comfy-table = "7"
+base64 = "0.22"
+libc = "0.2"
+image = { version = "0.25", default-features = false, features = ["png"] }
+imageproc = "0.25"
+rusttype = "0.9"
+fontdb = "0.16"
+regex = "1"
+walkdir = "2"
