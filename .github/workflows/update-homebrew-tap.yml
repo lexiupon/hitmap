@@ -1,0 +1,85 @@
+name: Update Homebrew tap
+
+on:
+  release:
+    types:
+      - published
+
+permissions:
+  contents: read
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+concurrency:
+  group: homebrew-tap-${{ github.event.release.tag_name }}
+  cancel-in-progress: false
+
+jobs:
+  update-tap:
+    name: bump Homebrew formula
+    if: ${{ !github.event.release.draft && !github.event.release.prerelease }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out hitmap repository
+        uses: actions/checkout@v6.0.2
+        with:
+          fetch-depth: 0
+
+      - name: Verify released tag comes from main
+        shell: bash
+        env:
+          TAG: ${{ github.event.release.tag_name }}
+        run: |
+          set -euo pipefail
+          git fetch origin main --force
+          tag_commit="$(git rev-list -n1 "refs/tags/${TAG}")"
+
+          if [[ -z "${tag_commit}" ]]; then
+            echo "Missing local tag ${TAG}" >&2
+            exit 1
+          fi
+
+          if ! git merge-base --is-ancestor "$tag_commit" origin/main; then
+            echo "Release tag ${TAG} is not reachable from origin/main" >&2
+            exit 1
+          fi
+
+      - name: Check out homebrew tap
+        uses: actions/checkout@v6.0.2
+        with:
+          repository: lexiupon/homebrew-tap
+          ref: main
+          token: ${{ secrets.HOMEBREW_TAP_GH_PAT }}
+          path: homebrew-tap
+
+      - name: Update hitmap formula
+        shell: bash
+        env:
+          TAG: ${{ github.event.release.tag_name }}
+        run: |
+          set -euo pipefail
+          version="${TAG#v}"
+          cd homebrew-tap
+          ./scripts/update-hitmap-formula.py "$version"
+
+      - name: Commit and push tap update
+        shell: bash
+        env:
+          TAG: ${{ github.event.release.tag_name }}
+        run: |
+          set -euo pipefail
+          version="${TAG#v}"
+          cd homebrew-tap
+
+          if git diff --quiet -- Formula/hitmap.rb; then
+            echo "Formula already up to date for v${version}"
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add Formula/hitmap.rb
+          git commit -m "hitmap ${version}"
+          git push origin main

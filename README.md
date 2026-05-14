@@ -63,6 +63,11 @@ GitHub Actions is set up to support both CI and tagged releases:
 
 This release layout is intended to make it straightforward to reference published binaries from a future Homebrew tap.
 
+The repository also includes a GitHub Actions workflow that updates `lexiupon/homebrew-tap`
+automatically whenever a GitHub Release is published from `main`.
+That workflow requires a repository secret named `HOMEBREW_TAP_GH_PAT` with permission to push to
+`lexiupon/homebrew-tap`.
+
 To cut a release:
 
 ```bash
