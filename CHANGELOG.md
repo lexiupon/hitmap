@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [0.1.1] - 2026-05-14
+
+Bug-fix release for the first public Rust version of `hitmap`.
+
+### Fixed
+
+- Corrected the CLI-reported version so `hitmap --version` now matches the package version from `Cargo.toml`.
+- Removed the legacy Python `hitmap` script from the repository to avoid versioning confusion between old and current implementations.
+
 ## [0.1.0] - 2026-05-14
 
 Initial public release of `hitmap`.

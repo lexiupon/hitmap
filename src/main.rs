@@ -13,7 +13,7 @@ mod text;
 use clap::{Parser, error::ErrorKind};
 use std::ffi::OsString;
 
-const VERSION: &str = "3.1.0";
+const VERSION: &str = env!("CARGO_PKG_VERSION");
 const ROOT_PASSTHROUGH_FLAGS: &[&str] = &["-h", "--help", "-V", "--version", "--"];
 
 /// Expand a leading `~` or `~/` to the user's home directory.

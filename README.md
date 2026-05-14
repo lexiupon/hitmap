@@ -68,8 +68,8 @@ To cut a release:
 ```bash
 cargo test
 cargo build --release
-git tag v0.1.0
-git push origin v0.1.0
+git tag v0.1.1
+git push origin v0.1.1
 ```
 
 ## Requirements
