@@ -19,6 +19,13 @@ and export PNGs for sharing or documentation.
 
 ![Text renderer preview](docs/images/hitmap-text.png)
 
+### Galleries
+
+Compare the available color profiles in both rendering modes:
+
+- [Kitty renderer gallery](docs/KITTY_GALLERY.md)
+- [Text renderer gallery](docs/TEXT_GALLERY.md)
+
 ## Features
 
 - **GitHub-style heatmaps in the terminal**
